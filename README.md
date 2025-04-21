@@ -6,6 +6,8 @@ O **Data Encryption Standard (DES)** é um algoritmo de criptografia simétrica 
 
 O bloco de entrada, representando o conteúdo a ser cifrado, é dividido em duas metades, chamadas de L (_left_) e R (_right_). Cada parte apresenta 32 bits, totalizando 64 bits. Esse bloco é **o dado a ser criptografado**.
 
+> Apesar do algoritmo ser baseado em uma chave de 64 bits, apenas 56 bits são efetivamente usados na geração das subchaves. Os 8 bits restantes (um em cada grupo de 8 bits) são reservados para verificação de paridade — ou seja, são bits de controle que garantem que o número de bits `1` em cada byte seja ímpar.
+
 #### 2️⃣ Aplicação das Rodadas
 
 Feita a divisão do bloco, inicia-se o processamento das rodadas (_rounds_). Ao todo, são 16 rodadas, e em cada uma delas:
@@ -24,6 +26,14 @@ Após a execução das 16 rodadas, os lados L e R são combinados (invertendo a 
 #### 🔁 Descriptografia
 
 A descriptografia é feita com os mesmos passos descritos, aplicando as subchaves na ordem inversa (da 16ª para a 1ª rodada).
+
+---
+
+### 🖼️ Representação Visual do DES
+
+<p align="center">
+  <img src="https://www.tutorialspoint.com/cryptography/images/des_structure.jpg" alt="Representação Visual do DES">
+</p>
 
 ---
 
@@ -53,6 +63,7 @@ Raramente. Ele é considerado inseguro devido ao tamanho da chave (56 bits). Foi
 
 ### 📚 Fontes
 
-- LUIZ, Luiz Vieira. *Como funciona o algoritmo DES*. Stack Overflow em Português. 2018. Disponível em: <https://pt.stackoverflow.com/questions/239247/>.
-- SIGMA Computing. *Como funciona o algoritmo DES*. YouTube, 2020. Disponível em: <https://www.youtube.com/watch?v=xhiCHnQy8JM>.
-- FÁBIO, Fabio Akita. *Data Encryption Standard (DES) – Algoritmo de Criptografia*. YouTube, 2020. Disponível em: <https://www.youtube.com/watch?v=A6mh3-HvY0k>.
+- LUIZ, Luiz Vieira. _Como funciona o algoritmo DES_. Stack Overflow em Português. 2018. Disponível em: <https://pt.stackoverflow.com/questions/239247/>.
+- SIGMA Computing. _Como funciona o algoritmo DES_. YouTube, 2020. Disponível em: <https://www.youtube.com/watch?v=xhiCHnQy8JM>.
+- TUTORIALSPOINT. _Cryptography - Data Encryption Standard_. Tutorialspoint, [s.d.]. Disponível em: https://www.tutorialspoint.com/cryptography/cryptography_data_encryption_standard.htm. Acesso em: 21 abr. 2025.
+- FÁBIO, Fabio Akita. _Data Encryption Standard (DES) – Algoritmo de Criptografia_. YouTube, 2020. Disponível em: <https://www.youtube.com/watch?v=A6mh3-HvY0k>.

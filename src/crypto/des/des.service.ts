@@ -95,7 +95,9 @@ export class DesService {
     for (let i = 0; i < bits.length; i += 8) {
       let byte = 0;
       for (let j = 0; j < 8; j++) {
-        byte = (byte << 1) | bits[i + j];
+        if (i + j < bits.length) {
+          byte = (byte << 1) | bits[i + j];
+        }
       }
       str += String.fromCharCode(byte);
     }
@@ -167,12 +169,14 @@ export class DesService {
       encryptedBits.push(...this.processBlock(block, keyBits));
     }
 
-    return this.bitsToString(encryptedBits);
+    const encryptedStr = this.bitsToString(encryptedBits);
+    return Buffer.from(encryptedStr, 'binary').toString('base64');
   }
 
   // Decripta uma mensagem usando o algoritmo DES
   decrypt(ciphertext: string, key: string) {
-    const bits = this.stringToBits(ciphertext);
+    const encryptedStr = Buffer.from(ciphertext, 'base64').toString('binary');
+    const bits = this.stringToBits(encryptedStr);
     const keyBits = this.stringToBits(key);
 
     const decryptedBits = [] as number[];

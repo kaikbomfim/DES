@@ -18,15 +18,15 @@ export class DesController {
     schema: {
       properties: {
         ciphertext: { type: "string", example: "A1B2C3D4E5F6" },
-        keyUsed: { type: "string", example: "0123456789ABCDEF" },
+        key: { type: "string", example: "0123456789ABCDEF" },
       },
     },
   })
   encrypt(@Body() dto: EncryptDto) {
-    const resultado = this.desService.encrypt(dto.text, dto.key);
+    const result = this.desService.encrypt(dto.text, dto.key);
     return {
-      ciphertext: resultado,
-      keyUsed: dto.key,
+      ciphertext: result,
+      key: dto.key,
     };
   }
 
@@ -43,9 +43,9 @@ export class DesController {
     },
   })
   decrypt(@Body() dto: DecryptDto) {
-    const resultado = this.desService.decrypt(dto.ciphertext, dto.key);
+    const result = this.desService.decrypt(dto.ciphertext, dto.key);
     return {
-      plaintext: resultado,
+      plaintext: result,
     };
   }
 

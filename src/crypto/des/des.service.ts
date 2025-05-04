@@ -95,7 +95,9 @@ export class DesService {
     for (let i = 0; i < bits.length; i += 8) {
       let byte = 0;
       for (let j = 0; j < 8; j++) {
-        byte = (byte << 1) | bits[i + j];
+        if (i + j < bits.length) {
+          byte = (byte << 1) | bits[i + j];
+        }
       }
       str += String.fromCharCode(byte);
     }
@@ -118,13 +120,15 @@ export class DesService {
   }
 
   // Função de Feistel - Coração do algoritmo DES
-  private feistelFunction(R: number[], subkey: number[]) {
+  private feistelFunction(R: number[], key: number[]) {
     const expanded = this.expand(R);
-    const xored = this.xor(expanded, subkey);
+    const xored = this.xor(expanded, key);
     const sboxed = [] as number[];
 
     for (let i = 0; i < 8; i++) {
-      const block = xored.slice(i * 6, (i + 1) * 6);
+      const start = i * 6;
+      const end = (i + 1) * 6;
+      const block = xored.slice(start, end);
       const row = (block[0] << 1) | block[5];
       const col =
         (block[1] << 3) | (block[2] << 2) | (block[3] << 1) | block[4];
@@ -139,8 +143,8 @@ export class DesService {
   }
 
   // Processa um bloco de 64 bits usando a chave fornecida
-  private processBlock(block: number[], key: number[], isDecrypt = false) {
-    let bits = this.permute(block, this.IP);
+  private processBlock(block: number[], key: number[]) {
+    const bits = this.permute(block, this.IP);
     let L = bits.slice(0, 32);
     let R = bits.slice(32);
 
@@ -167,18 +171,20 @@ export class DesService {
       encryptedBits.push(...this.processBlock(block, keyBits));
     }
 
-    return this.bitsToString(encryptedBits);
+    const encryptedStr = this.bitsToString(encryptedBits);
+    return Buffer.from(encryptedStr, "binary").toString("base64");
   }
 
   // Decripta uma mensagem usando o algoritmo DES
   decrypt(ciphertext: string, key: string) {
-    const bits = this.stringToBits(ciphertext);
+    const encryptedStr = Buffer.from(ciphertext, "base64").toString("binary");
+    const bits = this.stringToBits(encryptedStr);
     const keyBits = this.stringToBits(key);
 
     const decryptedBits = [] as number[];
     for (let i = 0; i < bits.length; i += 64) {
       const block = bits.slice(i, i + 64);
-      decryptedBits.push(...this.processBlock(block, keyBits, true));
+      decryptedBits.push(...this.processBlock(block, keyBits));
     }
 
     let paddingLength = 0;
@@ -249,7 +255,7 @@ export class DesService {
   // Ajusta o bit de paridade para seguir a especificação DES
   // No DES, cada byte da chave tem o bit menos significativo ajustado
   // para que o número total de bits 1 seja ímpar (paridade ímpar)
-  // Analogia: Como colocar um selo de verificação em cada carta para garantir que é autêntica
+  // Analogia: como colocar um selo de verificação em cada carta para garantir que é autêntica
   private adjustParityBit(value: number): number {
     let bitCount = 0;
     let tempValue = value >> 1;
@@ -259,10 +265,11 @@ export class DesService {
       tempValue >>= 1;
     }
 
+    // 0xfe = 1111 1110 --> 254
     if (bitCount % 2 === 0) {
-      return (value & 0xfe) | 1;
+      return (value & 0xfe) | 1; // força o último bit para 1
     } else {
-      return value & 0xfe;
+      return value & 0xfe; // força o último bit para 0
     }
   }
 }

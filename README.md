@@ -1,6 +1,6 @@
 ### 🔐 Algoritmo de Criptografia - DES
 
-O **Data Encryption Standard (DES)** é um algoritmo de criptografia simétrica de **blocos**, desenvolvido em **1977** pelo **NIST (National Institute of Standards and Technology)**, baseado na estrutura chamada **Rede de Feistel** (_Feistel Network_), e funciona em três etapas principais:
+O **Data Encryption Standard (DES)** é um algoritmo de criptografia simétrica de **blocos**, desenvolvido em 1977 pelo NIST (National Institute of Standards and Technology), baseado na estrutura chamada **Rede de Feistel** (_Feistel Network_), e funciona em três etapas principais:
 
 #### 1️⃣ Divisão do Bloco
 
@@ -10,12 +10,12 @@ O bloco de entrada, representando o conteúdo a ser cifrado, é dividido em duas
 
 #### 2️⃣ Aplicação das Rodadas
 
-Feita a divisão do bloco, inicia-se o processamento das rodadas (_rounds_). Ao todo, são 16 rodadas, e em cada uma delas:
+Feita a divisão do bloco, inicia-se o processamento das rodadas (_rounds_). Ao todo, são **16 rodadas**, e em cada uma delas:
 
 - O atual lado esquerdo da rodada vira o lado direito da próxima.
-- O novo lado direito é obtido ao aplicar uma função `F` ao lado direito anterior, junto com uma subchave gerada a partir da chave principal.
+- O novo lado direito é obtido ao aplicar uma função `F` ao lado direito anterior, em conjunto com a chave.
 
-Antes de ser combinado, o lado direito (R), que possui **32 bits**, passa por uma expansão para **48 bits**. Isso é feito através de uma permutação de expansão, onde certos bits de R são repetidos para criar o bloco expandido de 48 bits. Esse bloco expandido é então misturado com a **subchave** de 48 bits gerada a partir da chave principal.
+O lado direito (R), que possui **32 bits**, passa por uma expansão para **48 bits**. Isso é feito através de uma permutação de expansão, onde certos bits de R são repetidos para criar o bloco expandido de 48 bits. Esse bloco expandido é então misturado com a chave.
 
 O resultado dessa função `F` é então combinado através do operador `XOR` com o lado esquerdo anterior (L).
 
